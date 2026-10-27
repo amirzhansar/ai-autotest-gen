@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="250" viewBox="0 0 860 250">
+  <rect width="860" height="250" rx="14" fill="#0c0c0c"/>
+  <rect width="860" height="36" rx="14" fill="#1f1f1f"/>
+  <rect y="20" width="860" height="16" fill="#1f1f1f"/>
+  <circle cx="22" cy="18" r="6" fill="#f87171"/>
+  <circle cx="42" cy="18" r="6" fill="#fbbf24"/>
+  <circle cx="62" cy="18" r="6" fill="#34d399"/>
+  <text x="430" y="23" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#9ca3af">2. Run tests</text>
+
+  <g font-family="Consolas, Menlo, monospace" font-size="14.5" fill="#d4d4d4">
+    <text x="22" y="66">Tests:</text>
+    <text x="22" y="86">&#160;&#160;0. All tests</text>
+    <text x="22" y="106">&#160;&#160;1. test_login.py</text>
+    <text x="22" y="126">&#160;&#160;2. test_profile_name.py</text>
+    <text x="22" y="146">Which one to run? [0]: <tspan fill="#f8fafc">0</tspan></text>
+    <text x="22" y="176">&#160;&#160;<tspan fill="#f87171">[FAIL]</tspan> test_login::test_pasted_number[chromium] (line 18) - expected value '00015'</text>
+    <text x="22" y="196">&#160;&#160;<tspan fill="#34d399">[PASS]</tspan> test_profile_name::test_profile_name_is_visible[chromium]</text>
+    <text x="22" y="226">Total: 1 passed, 1 failed.</text>
+  </g>
+</svg>

@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="860" height="560" viewBox="0 0 860 560">
+  <rect width="860" height="560" rx="14" fill="#0c0c0c"/>
+  <rect width="860" height="36" rx="14" fill="#1f1f1f"/>
+  <rect y="20" width="860" height="16" fill="#1f1f1f"/>
+  <circle cx="22" cy="18" r="6" fill="#f87171"/>
+  <circle cx="42" cy="18" r="6" fill="#fbbf24"/>
+  <circle cx="62" cy="18" r="6" fill="#34d399"/>
+  <text x="430" y="23" text-anchor="middle" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" fill="#9ca3af">autotest_gen.py</text>
+
+  <g font-family="Consolas, Menlo, monospace" font-size="14.5" fill="#d4d4d4">
+    <text x="22" y="66" fill="#6b7280">==============================================</text>
+    <text x="22" y="86">&#160;&#160;&#160;Autotest generator (Playwright + AI)</text>
+    <text x="22" y="106" fill="#6b7280">==============================================</text>
+    <text x="22" y="126">&#160;&#160;1. Create a new test</text>
+    <text x="22" y="146">&#160;&#160;2. Run tests</text>
+    <text x="22" y="166">&#160;&#160;3. Open the tests folder</text>
+    <text x="22" y="186">&#160;&#160;4. Change the API key</text>
+    <text x="22" y="206">&#160;&#160;0. Exit</text>
+
+    <text x="22" y="236">Choose an item: <tspan fill="#f8fafc">1</tspan></text>
+    <text x="22" y="256">URL: <tspan fill="#67e8f9">github.com/amirzhansar</tspan></text>
+    <text x="22" y="276">Short scenario name (e.g. login): <tspan fill="#f8fafc">profile_name</tspan></text>
+    <text x="22" y="296" fill="#9ca3af">Open the profile.</text>
+    <text x="22" y="316" fill="#9ca3af">Expected result: the profile name is "Amirzhan"</text>
+    <text x="22" y="336" fill="#9ca3af">end</text>
+
+    <text x="22" y="366">Opening the browser. Click through the scenario and CLOSE the browser when you are done.</text>
+    <text x="22" y="386">Recording saved: tests\raw\profile_name_20261027_1650.py</text>
+    <text x="22" y="406">Sending to the AI, waiting for the answer...</text>
+    <text x="22" y="426">Autotest saved: tests\test_profile_name.py</text>
+
+    <text x="22" y="456">Run the test now? [Y/n]: <tspan fill="#f8fafc">y</tspan></text>
+    <text x="22" y="476"><tspan fill="#34d399">[PASS]</tspan> The test passed.</text>
+
+    <text x="22" y="506">Done. Test: test_profile_name.py</text>
+    <text x="22" y="536" fill="#6b7280">Press Enter to return to the menu...</text>
+  </g>
+</svg>
