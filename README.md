@@ -206,18 +206,10 @@ Not out of the box. Only Gemini is supported and tested.
 
 ```text
 ai-autotest-gen/
-├── autotest_gen.py          # the whole program
-├── selftests/               # unit tests for helpers (no browser, no AI)
-├── examples/                # a sample generated test
-├── docs/                    # logo and images for this README
-├── requirements.txt
-└── .github/workflows/ci.yml # lint + self-tests on Python 3.10–3.13
-```
-
-```bash
-pip install pytest pyflakes
-pyflakes autotest_gen.py selftests
-pytest selftests -v
+├── autotest_gen.py    # the whole program
+├── examples/          # a sample generated test
+├── docs/              # logo and images for this README
+└── requirements.txt
 ```
 
 ---
