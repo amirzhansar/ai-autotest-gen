@@ -1,25 +1,38 @@
 <div align="center">
 
-<img src="docs/banner.svg" alt="ai-autotest-gen" width="100%">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="docs/logo-dark.svg">
+  <img alt="ai-autotest-gen" src="docs/logo-light.svg" width="88" height="88">
+</picture>
 
-# ai-autotest-gen
+<h1>ai-autotest-gen</h1>
 
 **Click through a scenario in the browser. Paste your test case. Get a ready Playwright autotest.**
 
-[![CI](https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml/badge.svg)](https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml)
-![Python](https://img.shields.io/badge/python-3.10%2B-3776AB?logo=python&logoColor=white)
-![Playwright](https://img.shields.io/badge/Playwright-pytest-2EAD33?logo=playwright&logoColor=white)
-![Gemini](https://img.shields.io/badge/AI-Gemini-8E75B2?logo=googlegemini&logoColor=white)
-![Platform](https://img.shields.io/badge/platform-Windows-0078D6?logo=windows&logoColor=white)
-[![License: MIT](https://img.shields.io/badge/license-MIT-yellow)](LICENSE)
+<a href="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ci/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="CI" src="https://shieldcn.dev/github/ci/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
+<a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
+<br>
+<a href="https://www.python.org/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=dark"><img alt="Python 3.10+" src="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=light"></picture></a>
+<a href="https://playwright.dev/python/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=dark"><img alt="Playwright + pytest" src="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=light"></picture></a>
+<a href="https://aistudio.google.com/app/apikey"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=dark"><img alt="Gemini free tier" src="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=light"></picture></a>
+<a href="#-requirements"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=dark"><img alt="Windows" src="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=light"></picture></a>
 
-[Why](#-why-ai-autotest-gen) · [Quick start](#-quick-start) · [Features](#-features) · [How it works](#-how-it-works) · [Good test cases](#-writing-a-good-test-case) · [FAQ](#-faq)
-
-<img src="docs/demo.svg" alt="Creating a test in the console" width="85%">
-
-<sub>One menu item: open the site, click through, close the browser, get a test.</sub>
+[**Quick start**](#-quick-start) &nbsp;·&nbsp; [Why](#-why-ai-autotest-gen) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
 
 </div>
+
+<br>
+
+ai-autotest-gen opens your site with the **Playwright recorder**, lets you **click through a scenario**
+from your test case, and hands the recording and the test case to **Gemini**. You get back a
+**pytest file** with stable locators and with **checks taken from your expected result** —
+not just a replay of clicks.
+
+<p align="center">
+  <img src="docs/demo.svg" alt="Creating a test in the console" width="860">
+  <br>
+  <sub>Menu item 1: open the site, click through, close the browser, get a test.</sub>
+</p>
 
 ---
 
@@ -108,7 +121,7 @@ The AI does **not** edit a test after it fails. A failing test is a result for y
 
 An example of a generated test is in [`examples/test_profile_name.py`](examples/test_profile_name.py).
 
-## ✍️ Writing a good test case
+## 📝 Writing a good test case
 
 The output is only as good as the input. What works best:
 
@@ -200,7 +213,7 @@ ai-autotest-gen/
 ├── autotest_gen.py          # the whole program
 ├── selftests/               # unit tests for helpers (no browser, no AI)
 ├── examples/                # a sample generated test
-├── docs/                    # images for this README
+├── docs/                    # logo and images for this README
 ├── requirements.txt
 └── .github/workflows/ci.yml # lint + self-tests on Python 3.10–3.13
 ```
@@ -214,5 +227,5 @@ pytest selftests -v
 ---
 
 <div align="center">
-<sub>Made for QA engineers who'd rather test than type selectors · <a href="LICENSE">MIT License</a> · <a href="#ai-autotest-gen">Back to top</a></sub>
+<sub>Made for QA engineers · <a href="LICENSE">MIT license</a> · <a href="#readme">Back to top ↑</a></sub>
 </div>
