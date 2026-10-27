@@ -9,13 +9,11 @@
 
 **Click through a scenario in the browser. Paste your test case. Get a ready Playwright autotest.**
 
-<a href="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml/badge.svg"></a>
-<a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
-<br>
 <a href="https://www.python.org/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=dark"><img alt="Python 3.10+" src="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="https://playwright.dev/python/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=dark"><img alt="Playwright + pytest" src="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="https://aistudio.google.com/app/apikey"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=dark"><img alt="Gemini free tier" src="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="#-requirements"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=dark"><img alt="Windows" src="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=light"></picture></a>
+<a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
 
 [**Quick start**](#-quick-start) &nbsp;·&nbsp; [Why](#-from-test-case-to-autotest) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
 
