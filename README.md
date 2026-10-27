@@ -9,7 +9,7 @@
 
 **Click through a scenario in the browser. Paste your test case. Get a ready Playwright autotest.**
 
-<a href="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/ci/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="CI" src="https://shieldcn.dev/github/ci/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
+<a href="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml"><img alt="CI" src="https://github.com/amirzhansar/ai-autotest-gen/actions/workflows/ci.yml/badge.svg"></a>
 <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
 <br>
 <a href="https://www.python.org/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=dark"><img alt="Python 3.10+" src="https://shieldcn.dev/badge/Python-3.10%2B.svg?logo=python&variant=secondary&font=geist&mode=light"></picture></a>
