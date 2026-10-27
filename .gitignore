@@ -1,0 +1,16 @@
+# Your Gemini API key lives here - never commit it
+autotest_config.json
+
+# Generated tests and raw recordings may contain passwords and internal URLs
+tests/
+
+# Python / pytest
+__pycache__/
+*.pyc
+.pytest_cache/
+.venv/
+venv/
+
+# Playwright artifacts
+test-results/
+playwright-report/
