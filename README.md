@@ -15,7 +15,7 @@
 <a href="#-requirements"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=dark"><img alt="Windows" src="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=light"></picture></a>
 <a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
 
-[**Quick start**](#-quick-start) &nbsp;·&nbsp; [Why](#-from-test-case-to-autotest) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
+[**Quick start**](#-quick-start) &nbsp;·&nbsp; [Comparison](#-from-test-case-to-autotest) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
 
 </div>
 
