@@ -17,7 +17,7 @@
 <a href="https://aistudio.google.com/app/apikey"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=dark"><img alt="Gemini free tier" src="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="#-requirements"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=dark"><img alt="Windows" src="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=light"></picture></a>
 
-[**Quick start**](#-quick-start) &nbsp;·&nbsp; [Why](#-why-ai-autotest-gen) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
+[**Quick start**](#-quick-start) &nbsp;·&nbsp; [Why](#-from-test-case-to-autotest) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
 
 </div>
 
@@ -36,23 +36,23 @@ not just a replay of clicks.
 
 ---
 
-## 💡 Why ai-autotest-gen?
+## 💡 From test case to autotest
 
-Turning a manual test case into an autotest usually means hunting for selectors in DevTools, writing boilerplate, and remembering to add checks. Playwright's recorder helps with the selectors, but its output is a raw list of clicks with no assertions. **ai-autotest-gen** connects the two halves: you record the clicks, you provide the test case, and the AI writes the test that checks what the test case expects.
+Turning a manual test case into an autotest usually means hunting for selectors in DevTools, writing boilerplate and remembering to add every check. Playwright's recorder finds the selectors, but gives you only a raw list of clicks. **ai-autotest-gen** takes that recording together with your test case and writes the test that checks what the test case expects.
 
-| | Writing by hand | Playwright codegen only | **ai-autotest-gen** |
-|---|:---:|:---:|:---:|
-| Selectors found for you | — | ✅ | ✅ |
-| Assertions from the expected result | ✍️ by hand | — | ✅ |
-| Reproduces *how* the user acted (typing vs Ctrl+V paste) | ✍️ by hand | partly | ✅ |
-| Junk clicks cleaned up | — | — | ✅ |
-| Guessed parts clearly marked | — | — | ✅ |
-| One-line pass/fail report | — | — | ✅ |
+| | Writing it by hand | With ai-autotest-gen |
+|---|---|---|
+| **Selectors** | Dig them out of DevTools | Recorded while you click |
+| **Checks** | Write every `expect` yourself | Built from the expected result |
+| **Typing vs pasting** | Easy to test the wrong action | Reproduced the way the user did it |
+| **Accidental clicks** | Cleaned up by hand | Removed from the recording |
+| **Uncertain steps** | Hidden in the code | Marked with `# AI-GUESS:` |
+| **Run report** | Long pytest output | One line per test |
 
 ## 🚀 Quick start
 
 1. **Get a free Gemini key** at [aistudio.google.com/app/apikey](https://aistudio.google.com/app/apikey).
-2. **Run the program** — double-click `autotest_gen.py`. On the first run it installs everything it needs and asks for the key (press Enter on an empty line to open the key page).
+2. **Run the program** — double-click `autotest_gen.py`. On the first run it installs everything it needs and asks for the key.
 3. **Create a test** — menu item `1`: paste the URL and the test case, click through the scenario, close the browser.
 
 That's it. The test is in `tests/test_<name>.py` and runs with plain `pytest`.
@@ -147,12 +147,11 @@ end
 
 ## 📋 Requirements
 
-| | |
+| What | Needed |
 |---|---|
-| OS | Windows 10/11. Recording, generation and runs also work on macOS/Linux; "Open the tests folder" and the recorder window renaming are Windows-only. |
+| OS | Windows 10/11. Recording, generation and runs also work on macOS/Linux; only "Open the tests folder" is Windows-only. |
 | Python | 3.10 or newer |
 | AI | Free Google Gemini API key |
-| Network | Internet for the first install and for every AI request |
 
 ## 📥 Install
 
@@ -166,7 +165,7 @@ python autotest_gen.py
 > On the first run the program installs `pytest-playwright` and `google-genai` and downloads Chromium (a couple of minutes). Your key is saved to `autotest_config.json` next to the program.
 
 > [!IMPORTANT]
-> `autotest_config.json` and the `tests/` folder are in `.gitignore`. Keep it that way: the first holds your API key, the second may hold passwords and internal URLs from your test cases.
+> Never share `autotest_config.json` — it holds your API key. Be careful with the `tests/` folder too: generated tests and recordings may contain passwords and internal URLs from your test cases.
 
 Generated tests are ordinary pytest files and run without the program:
 
@@ -180,9 +179,8 @@ Settings are constants at the top of `autotest_gen.py`.
 
 | Constant | Default | What it does |
 |---|---|---|
-| `GEMINI_MODEL` | `gemini-3.8-flash` | Main model. Updated automatically if Google retires it. |
+| `GEMINI_MODEL` | `gemini-3.8-flash` | Main model. If Google retires it, the program switches to the recommended one and remembers it in `autotest_config.json`. |
 | `SLOWMO_MS` | `500` | Pause between browser actions during runs, in ms. `0` for full speed. |
-| `INSPECTOR_TITLE` | `Autotest Recorder` | Title shown instead of "Playwright Inspector". |
 | `RETRY_WAITS` | `[10, 20, 40]` | Seconds between retries when Gemini is overloaded. |
 | `SYSTEM_PROMPT` | rules text | The rules the AI follows. Change behavior here, not in the code. |
 
