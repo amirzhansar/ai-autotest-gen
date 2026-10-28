@@ -1,4 +1,4 @@
 # Installed automatically on the first run of autotest_gen.py.
-# Listed here for manual installs and CI.
+# Listed here for manual installs.
 pytest-playwright
 google-genai
