@@ -1,6 +1,5 @@
 import importlib.util
 import json
-import os
 import re
 import subprocess
 import sys
@@ -16,20 +15,11 @@ GEMINI_MODEL = "gemini-3.8-flash"
 SLOWMO_MS = 500  # pause between browser actions during test runs (ms); 0 - no pause
 BROWSER_ARGS = ["--headed", "--slowmo", str(SLOWMO_MS)]  # browser is always visible
 AI_GUESS_MARK = "AI-GUESS:"  # comment the AI puts above lines it had to guess
-ENV_FILE = BASE_DIR / ".env"  # passwords, logins, base URL - never share this file
-ENV_EXAMPLE_FILE = BASE_DIR / ".env.example"  # variable names only, safe to share
-CONFTEST_FILE = TESTS_DIR / "conftest.py"  # loads .env when tests run
 
 SYSTEM_PROMPT = f"""You are a senior QA automation engineer. You write autotests in Python + pytest + pytest-playwright.
 
 Rules:
 - Use the `page` fixture from pytest-playwright (do not create the browser manually).
-- Locators, in order of preference: get_by_test_id, get_by_role with name, get_by_label /
-  get_by_placeholder, get_by_text. Avoid CSS classes, XPath, bare tag locators like
-  locator("div") and .nth(). If there are several identical elements, first try to scope by
-  a unique text from the test case or the recording, for example:
-  page.get_by_role("row").filter(has_text="<unique text>").get_by_role("button", name="Delete").
-  Use .nth() only as a last resort.
 - Take locators from the codegen recording. If the recording has no element for a step
   from the test case, still write the step with the most likely locator (prefer get_by_role /
   get_by_text with text from the test case) and put this comment above that line:
@@ -65,18 +55,8 @@ Rules:
 - Handle popups like a cookie banner carefully (if visible -> close it).
 - In every page.goto(...) use wait_until="domcontentloaded" - do not wait for the full page load,
   expect(...) takes care of waiting for the needed elements.
-- Never hardcode secrets or stand-specific data: passwords, logins / usernames / emails used to
-  sign in, tokens, API keys and the site's base address. Read them with os.environ["NAME"]
-  (add `import os`), names in UPPER_SNAKE_CASE starting with APP_ (APP_LOGIN, APP_PASSWORD);
-  never use system names like USERNAME, USER, PATH, HOME.
-  The site's base address is always os.environ["BASE_URL"] (scheme + host + port, no trailing
-  slash): page.goto(f"{{os.environ['BASE_URL']}}/path"); build expected URLs from it too.
-  Use only the form os.environ["NAME"], not os.getenv. Values that are themselves the subject
-  of a check (expected texts, names on the page) stay in the code.
 - Test names and docstrings in English, clear and matching the test case.
-- Always write the test. Return ONLY a ```python ... ``` block with the test and, if it uses
-  environment variables, a second ```env ... ``` block with every variable it uses and its value
-  from the test case or the recording, one NAME=value per line. No explanations.
+- Always write the test. Return ONLY the code of one file in a ```python ... ``` block, without explanations.
 """
 
 # ---------- config and installation ----------
@@ -254,197 +234,8 @@ def ask_ai_safe(cfg: dict, prompt: str) -> str:
 
 
 def extract_code(text: str) -> str:
-    m = re.search(r"```python[ \t]*\n(.*?)```", text, re.S) or re.search(r"```[ \t]*\n(.*?)```", text, re.S)
+    m = re.search(r"```(?:python)?\s*\n(.*?)```", text, re.S)
     return (m.group(1) if m else text).strip() + "\n"
-
-
-# ---------- .env (passwords, logins, base URL) ----------
-
-ENV_REF = re.compile(r"""os\.environ\[\s*['"]([A-Za-z_][A-Za-z0-9_]*)['"]\s*\]""")
-
-CONFTEST_MARK = "# Created by autotest_gen.py"
-CONFTEST_CODE = CONFTEST_MARK + ''' - loads ../.env before the tests run.
-import os
-import re
-from pathlib import Path
-
-import pytest
-
-ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
-ENV_REF = re.compile(r"""os\\.environ\\[\\s*['"]([A-Za-z_][A-Za-z0-9_]*)['"]\\s*\\]""")
-
-
-def _load_env() -> None:
-    if not ENV_FILE.exists():
-        return
-    for line in ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
-        line = line.strip()
-        if not line or line.startswith("#") or "=" not in line:
-            continue
-        name, value = line.split("=", 1)
-        value = value.strip()
-        if len(value) >= 2 and value[0] == value[-1] and value[0] in "\\"'":
-            value = value[1:-1]
-        os.environ.setdefault(name.strip(), value)  # CI secrets win over the file
-
-
-_load_env()
-
-
-@pytest.fixture(autouse=True)
-def _require_env_vars(request):
-    """Fail with a clear message instead of a KeyError if a variable is missing."""
-    try:
-        source = Path(str(request.node.fspath)).read_text(encoding="utf-8")
-    except OSError:
-        return
-    missing = sorted({n for n in ENV_REF.findall(source) if not os.environ.get(n)})
-    if missing:
-        pytest.fail(f"{', '.join(missing)} not set in .env", pytrace=False)
-'''
-
-
-def ensure_conftest() -> None:
-    """Creates tests/conftest.py; never overwrites a conftest the user wrote."""
-    if CONFTEST_FILE.exists() and CONFTEST_MARK not in CONFTEST_FILE.read_text(encoding="utf-8"):
-        return
-    if not CONFTEST_FILE.exists() or CONFTEST_FILE.read_text(encoding="utf-8") != CONFTEST_CODE:
-        CONFTEST_FILE.write_text(CONFTEST_CODE, encoding="utf-8")
-
-
-def read_env_file() -> dict[str, str]:
-    env = {}
-    if ENV_FILE.exists():
-        for line in ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
-            line = line.strip()
-            if line and not line.startswith("#") and "=" in line:
-                name, value = line.split("=", 1)
-                value = value.strip()
-                if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
-                    value = value[1:-1]
-                env[name.strip()] = value
-    return env
-
-
-def add_env_vars(new: dict[str, str]) -> None:
-    """Appends variables to .env and their names to .env.example."""
-    if not new:
-        return
-    if not ENV_FILE.exists():
-        ENV_FILE.write_text("# Values for the tests. Never share this file.\n", encoding="utf-8")
-    with ENV_FILE.open("a", encoding="utf-8") as f:
-        for name, value in new.items():
-            f.write(f"{name}={value}\n")
-
-    known = set()
-    if ENV_EXAMPLE_FILE.exists():
-        known = {l.split("=", 1)[0].strip() for l in ENV_EXAMPLE_FILE.read_text(encoding="utf-8-sig").splitlines()
-                 if "=" in l and not l.startswith("#")}
-    else:
-        ENV_EXAMPLE_FILE.write_text("# Variables the tests need. Copy to .env and fill in the values.\n",
-                                    encoding="utf-8")
-    with ENV_EXAMPLE_FILE.open("a", encoding="utf-8") as f:
-        for name in new:
-            if name not in known:
-                f.write(f"{name}=\n")
-
-
-def parse_env_block(answer: str) -> dict[str, str]:
-    m = re.search(r"```(?:env|dotenv|ini|bash|sh)[ \t]*\n(.*?)```", answer, re.S)
-    values = {}
-    for line in (m.group(1).splitlines() if m else []):
-        line = line.strip()
-        if line.startswith("export "):
-            line = line[7:]
-        if line and not line.startswith("#") and "=" in line:
-            name, value = line.split("=", 1)
-            name, value = name.strip(), value.strip()
-            if len(value) >= 2 and value[0] == value[-1] and value[0] in "\"'":
-                value = value[1:-1]
-            if re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", name):
-                values[name] = value
-    return values
-
-
-def site_origin(url: str) -> str:
-    from urllib.parse import urlparse
-    u = urlparse(url)
-    return f"{u.scheme}://{u.netloc}"
-
-
-def resolve_env(code: str, proposed: dict[str, str], url: str) -> tuple[str, list[str], list[str]]:
-    """Makes sure every variable the test uses exists in .env.
-    Returns (code, saved names, notes). If a name is already in .env with a different value
-    (another site, another account), the new one is saved as NAME_2 and the code is updated."""
-    existing = read_env_file()
-    defaults = {"BASE_URL": site_origin(url)}
-    to_add, notes = {}, []
-
-    # os.getenv("X") / os.environ.get("X") -> os.environ["X"], so the variable is tracked
-    code = re.sub(r"""os\.(?:getenv|environ\.get)\(\s*(['"])([A-Za-z_][A-Za-z0-9_]*)\1\s*\)""",
-                  r'os.environ["\2"]', code)
-
-    # A name the system already has (USERNAME, PATH...) would win over .env - rename it.
-    for name in dict.fromkeys(ENV_REF.findall(code)):
-        if name != "BASE_URL" and name in os.environ and name not in existing:
-            new_name = name if name.startswith("APP_") else f"APP_{name}"
-            if new_name == name:
-                new_name = f"{name}_VALUE"
-            code = re.sub(rf"""(os\.environ\[\s*['"]){name}(['"]\s*\])""", rf"\g<1>{new_name}\g<2>", code)
-            if name in proposed:
-                proposed = {**proposed, new_name: proposed[name]}
-            notes.append(f"{name} is a system variable on this computer - this test uses {new_name}")
-
-    for name in dict.fromkeys(ENV_REF.findall(code)):
-        value = proposed[name] if name in proposed else defaults.get(name)
-
-        if name not in existing:
-            if value is None:
-                value = input(f"   Value for {name} (saved to .env, Enter to leave empty): ").strip()
-            to_add[name] = value
-            continue
-
-        if value is None or existing[name] == value:
-            continue  # already in .env with the same value - reuse it
-
-        # Same name, different value (another site or account): keep both.
-        i = 2
-        while True:
-            new_name = f"{name}_{i}"
-            if existing.get(new_name) == value:
-                break
-            if new_name not in existing and new_name not in to_add:
-                to_add[new_name] = value
-                break
-            i += 1
-        code = re.sub(rf"""(os\.environ\[\s*['"]){name}(['"]\s*\])""", rf"\g<1>{new_name}\g<2>", code)
-        notes.append(f"{name} is already in .env with a different value - this test uses {new_name}")
-
-    add_env_vars(to_add)
-    return code, list(to_add), notes
-
-
-# ---------- fragile selectors ----------
-
-TAG_ONLY = {"div", "span", "a", "li", "ul", "ol", "p", "td", "tr", "section", "img", "svg", "i"}
-
-
-def find_fragile_selectors(code: str) -> list[int]:
-    """Line numbers with selectors that break easily: .nth(), .last, XPath, CSS classes, bare tags."""
-    lines = []
-    for no, line in enumerate(code.splitlines(), 1):
-        stripped = line.strip()
-        if stripped.startswith("#"):
-            continue
-        fragile = ".nth(" in line or ".last" in line
-        for m in re.finditer(r"""locator\(\s*(["'])(.*?)\1""", line):
-            sel = m.group(2).strip()
-            if (sel.startswith(("//", "xpath=", "(//")) or sel.lower() in TAG_ONLY
-                    or re.search(r"(^|[\s>+~])[a-z0-9]*\.[A-Za-z_-]", sel)):
-                fragile = True
-        if fragile:
-            lines.append(no)
-    return lines
 
 
 # ---------- Playwright ----------
@@ -609,10 +400,7 @@ def print_short_report(cmd: list[str]) -> None:
             failed += 1
             msg = (problem.get("message") or problem.text or "").strip()
             first = next((l.strip() for l in msg.splitlines() if l.strip()), "no description")
-            setup = re.match(r'^failed on (?:setup|teardown) with "(.*)"$', first)
-            if setup:
-                first = setup.group(1)
-            first = re.sub(r"^(\w+(\.\w+)*Error|Failed): ", "", first)[:150]
+            first = re.sub(r"^\w+(\.\w+)*Error: ", "", first)[:150]
             lines = re.findall(rf"{re.escape(file)}\.py:(\d+)", problem.text or "")
             where = f" (line {lines[-1]})" if lines else ""
             print(f"  [FAIL] {file}::{name}{where} - {first}")
@@ -639,11 +427,8 @@ def create_test(cfg: dict):
     raw_code = record(url, raw_file)
     print(f"Recording saved: {raw_file}")
 
-    env_names = ", ".join(read_env_file()) or "none yet"
     prompt = (
         f"Site: {url}\n"
-        f"BASE_URL for this site: {site_origin(url)}\n"
-        f"Variables already in .env (reuse a name only if it means the same thing): {env_names}\n"
         f"Scenario: {name}\n"
         f"Test case / expected result: {case or 'not specified - infer it from the actions'}\n\n"
         f"Playwright codegen recording:\n```python\n{raw_code}\n```\n\n"
@@ -652,35 +437,21 @@ def create_test(cfg: dict):
     print("Sending to the AI, waiting for the answer...")
     answer = ask_ai_safe(cfg, prompt)
     code = extract_code(answer)
-    code, saved, notes = resolve_env(code, parse_env_block(answer), url)
     test_file.write_text(code, encoding="utf-8")
-    ensure_conftest()
     print(f"Autotest saved: {test_file}")
-    if saved:
-        print(f"Saved to .env: {', '.join(saved)}")
-    for note in notes:
-        print(f"[!] {note}")
     guessed = code.count(AI_GUESS_MARK)
     if guessed:
         print(f"[!] The AI guessed {guessed} place(s) that were not in the recording - "
               f'they are marked "{AI_GUESS_MARK}" in the file.')
-    fragile = find_fragile_selectors(code)
-    if fragile:
-        print(f"[!] {len(fragile)} fragile selector(s) (element number, CSS class or XPath) - "
-              f"may break when the page changes: line(s) {', '.join(map(str, fragile))}")
 
     if yes("\nRun the test now? [Y/n]: "):
         ok, output = run_test(test_file)
         if ok:
             print("[PASS] The test passed.")
         else:
-            reason = next((l.strip() for l in output.splitlines() if " not set in .env" in l), "")
-            if not reason:
-                reason = next((l.strip()[1:].strip() for l in output.splitlines()
-                               if l.strip().startswith("E ")
-                               and not re.fullmatch(r"[.FEsxX ]*\[\s*\d+%\]", l.strip()[1:].strip())
-                               and l.strip()[1:].strip()), "")
-            reason = re.sub(r"^(\w+(\.\w+)*Error|Failed): ", "", reason)[:150]
+            reason = next((l.strip()[1:].strip() for l in output.splitlines()
+                           if l.strip().startswith("E ") and l.strip()[1:].strip()), "")
+            reason = re.sub(r"^\w+(\.\w+)*Error: ", "", reason)[:150]
             print(f"[FAIL] The test failed{' - ' + reason if reason else ''}")
             print("   Check whether it is a bug on the site or an error in the test (item 2 - run with the browser).")
 
@@ -708,7 +479,6 @@ def main():
         cfg = ask_key(cfg)
     ensure_packages(cfg)
     TESTS_DIR.mkdir(exist_ok=True)
-    ensure_conftest()
 
     while True:
         print(MENU)
