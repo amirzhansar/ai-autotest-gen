@@ -1,5 +1,8 @@
-# Your Gemini API key lives here - never commit it
-autotest_config.json
+# Your Gemini API key and test passwords - never commit them
+   autotest_config.json
+   .env
+   .env.*
+   !.env.example
 
 # Generated tests and raw recordings may contain passwords and internal URLs
 tests/
