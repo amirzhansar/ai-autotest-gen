@@ -1,21 +1,51 @@
-MIT License
+ai-autotest-gen License
 
-Copyright (c) 2026 Amirzhan Sartayev
+Copyright (c) 2026 Amirzhan Sartayev (https://github.com/amirzhansar)
+All rights reserved.
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+1. Ownership
+   ai-autotest-gen, including its source code, documentation, images and
+   examples (the "Software"), is the work of Amirzhan Sartayev (the "Author").
+   All rights not expressly granted in this license are reserved by the Author.
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+2. Viewing
+   You may view and read the Software in this repository. Forking it on
+   GitHub is allowed only to the extent required by the GitHub Terms of
+   Service; a fork does not grant any additional rights.
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+3. Permission required
+   You may not use, copy, modify, merge, distribute, sublicense, sell, or
+   include the Software or any part of it in another product, service or
+   internal process, whether for personal, educational or commercial
+   purposes, without prior written permission from the Author.
+   To request permission, contact the Author through
+   https://github.com/amirzhansar. Permission is valid only in writing
+   (for example, by email) and only on the terms stated in it.
+
+4. Attribution
+   Wherever the Author grants permission, every use, copy, modified version
+   and derived work must:
+   a) keep this copyright notice and this license unchanged;
+   b) credit the Author visibly, for example:
+      "Based on ai-autotest-gen by Amirzhan Sartayev
+       (https://github.com/amirzhansar/ai-autotest-gen)";
+   c) not present the Software, or any work based on it, as the work of
+      anyone else.
+
+5. Generated tests
+   Tests that you generate with the Software for your own projects belong
+   to you. This license covers the Software itself, not its output.
+
+6. Earlier versions
+   Versions of the Software published before October 28, 2026 were released
+   under the MIT License. Copies of those earlier versions remain under the
+   MIT License. This license applies to all versions published on or after
+   that date.
+
+7. No warranty
+   THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+   IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+   FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+   AUTHOR BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+   ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+   CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
