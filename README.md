@@ -13,7 +13,7 @@
 <a href="https://playwright.dev/python/"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=dark"><img alt="Playwright + pytest" src="https://shieldcn.dev/badge/Playwright-pytest.svg?logo=pytest&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="https://aistudio.google.com/app/apikey"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=dark"><img alt="Gemini free" src="https://shieldcn.dev/badge/Gemini-free%20tier.svg?logo=googlegemini&variant=secondary&font=geist&mode=light"></picture></a>
 <a href="#-requirements"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=dark"><img alt="Windows" src="https://shieldcn.dev/badge/Windows-10%20%C2%B7%2011.svg?variant=secondary&font=geist&mode=light"></picture></a>
-<a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=dark"><img alt="License" src="https://shieldcn.dev/github/license/amirzhansar/ai-autotest-gen.svg?variant=secondary&font=geist&mode=light"></picture></a>
+<a href="LICENSE"><picture><source media="(prefers-color-scheme: dark)" srcset="https://shieldcn.dev/badge/License-All%20rights%20reserved.svg?logo=lu:Scale&variant=secondary&font=geist&mode=dark"><img alt="License: all rights reserved" src="https://shieldcn.dev/badge/License-All%20rights%20reserved.svg?logo=lu:Scale&variant=secondary&font=geist&mode=light"></picture></a>
 
 [**Quick start**](#-quick-start) &nbsp;·&nbsp; [Comparison](#-from-test-case-to-autotest) &nbsp;·&nbsp; [Features](#-features) &nbsp;·&nbsp; [How it works](#-how-it-works) &nbsp;·&nbsp; [Good test cases](#-writing-a-good-test-case) &nbsp;·&nbsp; [FAQ](#-faq)
 
@@ -212,8 +212,15 @@ ai-autotest-gen/
 └── requirements.txt
 ```
 
+
+## 📄 License
+
+**All rights reserved.** You can read the code here, but using, copying or modifying it — personally or at a company — needs written permission from the author. Where permission is given, the author must always be credited: *Based on ai-autotest-gen by Amirzhan Sartayev*. Tests you generate with it are yours.
+
+To ask for permission, reach out via [github.com/amirzhansar](https://github.com/amirzhansar). Versions published before October 28, 2026 remain under the MIT License. Full text: [LICENSE](LICENSE).
+
 ---
 
 <div align="center">
-<sub>Made for QA engineers · <a href="LICENSE">MIT license</a> · <a href="#readme">Back to top ↑</a></sub>
+<sub>Made for QA engineers · <a href="LICENSE">License</a> · <a href="#readme">Back to top ↑</a></sub>
 </div>
