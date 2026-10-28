@@ -45,6 +45,8 @@ Turning a manual test case into an autotest usually means hunting for selectors 
 | **Typing vs pasting** | Easy to test the wrong action | Reproduced the way the user did it |
 | **Accidental clicks** | Cleaned up by hand | Removed from the recording |
 | **Uncertain steps** | Hidden in the code | Marked with `# AI-GUESS:` |
+| **Passwords and stands** | Hardcoded in every test | One `.env` file, tests read from it |
+| **Fragile selectors** | Found when the test breaks | Flagged right after generation |
 | **Run report** | Long pytest output | One line per test |
 
 ## 🚀 Quick start
@@ -73,6 +75,9 @@ A paste is tested as a real Ctrl+V through the clipboard, not as a `fill()` that
 **🏷️ Honest about guesses**
 When the recording lacks an element, the AI still writes the step but marks it with `# AI-GUESS:` and the program tells you how many there are.
 
+**🔐 Secrets out of the code**
+Passwords, logins and the site address go to `.env`, not into the test. Change a password or a stand in one line — every test picks it up.
+
 </td>
 <td width="50%" valign="top">
 
@@ -87,6 +92,9 @@ Menu item `2` runs all tests or one, with a slow visible browser and a short `[P
 
 **🧰 Zero setup**
 One file. Libraries, browser and key are handled on the first run.
+
+**🧷 Stable selectors first**
+Test IDs, roles and labels come first; `.nth()`, CSS classes and XPath are used only as a last resort — and flagged with line numbers.
 
 </td>
 </tr>
@@ -106,7 +114,8 @@ flowchart LR
 1. You give a URL and a test case: steps, data, expected result.
 2. The browser opens with the Playwright recorder. You perform the steps and close the browser.
 3. The recording and the test case go to Gemini together with a fixed set of rules: take locators from the recording, take expected values from the test case as is, reproduce the user's actions faithfully, mark anything guessed.
-4. The answer is saved as a pytest file and, if you want, run once right away.
+4. The answer is saved as a pytest file. Passwords, logins and the site address it needs are written to `.env`, and the program warns about guessed steps and fragile selectors.
+5. If you want, the test runs once right away.
 
 The AI does **not** edit a test after it fails. A failing test is a result for you to judge — a bug on the site or a mistake in the test — not something to be silently "fixed".
 
@@ -117,7 +126,7 @@ The AI does **not** edit a test after it fails. A failing test is a result for y
 <br><sub>Menu item 2: one line per test, the failing line and the reason.</sub>
 </div>
 
-An example of a generated test is in [`examples/test_profile_name.py`](examples/test_profile_name.py).
+Examples of generated tests: [`examples/test_profile_name.py`](examples/test_profile_name.py) (a simple check on a public page) and [`examples/test_invalid_login.py`](examples/test_invalid_login.py) (a negative sign-in test that reads the stand address, login and password from `.env`).
 
 ## 📝 Writing a good test case
 
@@ -163,7 +172,7 @@ python autotest_gen.py
 > On the first run the program installs `pytest-playwright` and `google-genai` and downloads Chromium (a couple of minutes). Your key is saved to `autotest_config.json` next to the program.
 
 > [!IMPORTANT]
-> Never share `autotest_config.json` — it holds your API key. Be careful with the `tests/` folder too: generated tests and recordings may contain passwords and internal URLs from your test cases.
+> Never share `autotest_config.json` (your API key) or `.env` (passwords and logins for your tests). Be careful with `tests/raw/` too: raw recordings may still contain what you typed. `.env.example` lists only variable names and is safe to share.
 
 Generated tests are ordinary pytest files and run without the program:
 
@@ -192,6 +201,12 @@ The URL, your test case and the click recording — including any passwords and 
 
 **What does `# AI-GUESS:` mean?**
 The recording had no element for that step, so the AI picked the most likely locator. Check these lines first when a test fails.
+
+**Where do passwords go?**
+To `.env` next to the program, for example `APP_PASSWORD=...`. The test reads `os.environ["APP_PASSWORD"]`, and `tests/conftest.py` (created by the program) loads `.env` before every run. Variables already set in the environment — like CI secrets — win over the file. If a name is already used for another site or account, the new value is saved as `NAME_2`, so tests never overwrite each other. Names start with `APP_`; if the AI picks a name your system already has (like `USERNAME` on Windows), the program renames it and tells you.
+
+**What is a "fragile selector" warning?**
+A selector that depends on the page layout: an element number (`.nth()`), a CSS class or XPath. It works today but may break after a redesign. Rewrite it with a role, label or text — or ask the developers for a `data-testid`.
 
 **The test failed. Is it a bug?**
 Maybe. Look at the reason line: a mismatch in `expect(...)` (text, URL, value) usually points to the site; a timeout on a line marked `AI-GUESS` usually points to the test.
