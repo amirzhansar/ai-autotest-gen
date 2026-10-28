@@ -1,5 +1,6 @@
 import importlib.util
 import json
+import os
 import re
 import subprocess
 import sys
@@ -66,7 +67,8 @@ Rules:
   expect(...) takes care of waiting for the needed elements.
 - Never hardcode secrets or stand-specific data: passwords, logins / usernames / emails used to
   sign in, tokens, API keys and the site's base address. Read them with os.environ["NAME"]
-  (add `import os`), names in UPPER_SNAKE_CASE, for example APP_LOGIN, APP_PASSWORD.
+  (add `import os`), names in UPPER_SNAKE_CASE starting with APP_ (APP_LOGIN, APP_PASSWORD);
+  never use system names like USERNAME, USER, PATH, HOME.
   The site's base address is always os.environ["BASE_URL"] (scheme + host + port, no trailing
   slash): page.goto(f"{{os.environ['BASE_URL']}}/path"); build expected URLs from it too.
   Use only the form os.environ["NAME"], not os.getenv. Values that are themselves the subject
@@ -275,7 +277,7 @@ ENV_REF = re.compile(r"""os\\.environ\\[\\s*['"]([A-Za-z_][A-Za-z0-9_]*)['"]\\s*
 def _load_env() -> None:
     if not ENV_FILE.exists():
         return
-    for line in ENV_FILE.read_text(encoding="utf-8").splitlines():
+    for line in ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
         line = line.strip()
         if not line or line.startswith("#") or "=" not in line:
             continue
@@ -313,7 +315,7 @@ def ensure_conftest() -> None:
 def read_env_file() -> dict[str, str]:
     env = {}
     if ENV_FILE.exists():
-        for line in ENV_FILE.read_text(encoding="utf-8").splitlines():
+        for line in ENV_FILE.read_text(encoding="utf-8-sig").splitlines():
             line = line.strip()
             if line and not line.startswith("#") and "=" in line:
                 name, value = line.split("=", 1)
@@ -336,7 +338,7 @@ def add_env_vars(new: dict[str, str]) -> None:
 
     known = set()
     if ENV_EXAMPLE_FILE.exists():
-        known = {l.split("=", 1)[0].strip() for l in ENV_EXAMPLE_FILE.read_text(encoding="utf-8").splitlines()
+        known = {l.split("=", 1)[0].strip() for l in ENV_EXAMPLE_FILE.read_text(encoding="utf-8-sig").splitlines()
                  if "=" in l and not l.startswith("#")}
     else:
         ENV_EXAMPLE_FILE.write_text("# Variables the tests need. Copy to .env and fill in the values.\n",
@@ -377,6 +379,21 @@ def resolve_env(code: str, proposed: dict[str, str], url: str) -> tuple[str, lis
     existing = read_env_file()
     defaults = {"BASE_URL": site_origin(url)}
     to_add, notes = {}, []
+
+    # os.getenv("X") / os.environ.get("X") -> os.environ["X"], so the variable is tracked
+    code = re.sub(r"""os\.(?:getenv|environ\.get)\(\s*(['"])([A-Za-z_][A-Za-z0-9_]*)\1\s*\)""",
+                  r'os.environ["\2"]', code)
+
+    # A name the system already has (USERNAME, PATH...) would win over .env - rename it.
+    for name in dict.fromkeys(ENV_REF.findall(code)):
+        if name != "BASE_URL" and name in os.environ and name not in existing:
+            new_name = name if name.startswith("APP_") else f"APP_{name}"
+            if new_name == name:
+                new_name = f"{name}_VALUE"
+            code = re.sub(rf"""(os\.environ\[\s*['"]){name}(['"]\s*\])""", rf"\g<1>{new_name}\g<2>", code)
+            if name in proposed:
+                proposed = {**proposed, new_name: proposed[name]}
+            notes.append(f"{name} is a system variable on this computer - this test uses {new_name}")
 
     for name in dict.fromkeys(ENV_REF.findall(code)):
         value = proposed[name] if name in proposed else defaults.get(name)
