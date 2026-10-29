@@ -217,7 +217,7 @@ ai-autotest-gen/
 
 **All rights reserved.** You can read the code here, but using, copying or modifying it — personally or at a company — needs written permission from the author. Where permission is given, the author must always be credited: *Based on ai-autotest-gen by Amirzhan Sartayev*. Tests you generate with it are yours.
 
-To ask for permission, reach out via [github.com/amirzhansar](https://github.com/amirzhansar). Versions published before October 28, 2026 remain under the MIT License. Full text: [LICENSE](LICENSE).
+To ask for permission, reach out via [github.com/amirzhansar](https://github.com/amirzhansar).
 
 ---
 
