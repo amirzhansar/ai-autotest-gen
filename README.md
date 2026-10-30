@@ -23,8 +23,7 @@
 
 ai-autotest-gen opens your site with the **Playwright recorder**, lets you **click through a scenario**
 from your test case, and hands the recording and the test case to **Gemini**. You get back a
-**pytest file** with stable locators and with **checks taken from your expected result** —
-not just a replay of clicks.
+**pytest file** with stable locators and with **checks taken from your expected result**
 
 <p align="center">
   <img src="docs/demo.svg" alt="Creating a test in the console" width="860">
